@@ -1,0 +1,31 @@
+{
+  "name": "feauto",
+  "version": "1.0.0",
+  "description": "前端自动化实践",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "css-loader": "^0.23.1",
+    "jquery": "^2.2.3",
+    "jsx-loader": "^0.13.2",
+    "file-loader": "^0.8.5",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "webpack-dev-server --inline  --hot --content-base build/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YoungFox/feauto.git"
+  },
+  "author": "YWL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YoungFox/feauto/issues"
+  },
+  "homepage": "https://github.com/YoungFox/feauto#readme"
+}

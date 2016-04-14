@@ -35,7 +35,7 @@ module.exports = {
     plugins: [commonsPlugin,UglifyJsPlugin,SourceMapDevToolPlugin],
     //页面入口文件配置
     entry: {
-        index : './dev/static/js/entry.js',
+        index : './dev/src/js/entry.js',
         jquery: ['jquery']
     },
     //入口文件输出配置
@@ -56,8 +56,8 @@ module.exports = {
     //其它解决方案配置
     resolve: {
         //配置查找模块的路径和扩展名和别名（方便书写）
-        root: 'E:/github/flux-example/src', //绝对路径
-        // 现在可以写 require('file') 代替 require('file.js')
+        // root: 'E:/github/flux-example/src', //绝对路径
+        //这样就可以写 require('file') 代替 require('file.js')
         extensions: ['', '.js', '.json', '.scss'],
         alias: {
             AppStore : 'js/stores/AppStores.js',

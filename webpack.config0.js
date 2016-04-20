@@ -41,4 +41,5 @@ module.exports={
         new webpack.optimize.CommonsChunkPlugin("js/commons.js", ["index"])
     ]
     //test
+    // 制造一个冲突
 };

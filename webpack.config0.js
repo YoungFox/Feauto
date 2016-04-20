@@ -40,4 +40,5 @@ module.exports={
         }),
         new webpack.optimize.CommonsChunkPlugin("js/commons.js", ["index"])
     ]
+    //test
 };

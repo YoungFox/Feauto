@@ -13,7 +13,12 @@
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "extract-loader": "0.0.2",
+    "html": "0.0.10",
+    "html-minify-loader": "^1.1.0",
+    "raw-loader": "^0.5.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "webpack-dev-server --inline  --hot --content-base build/"

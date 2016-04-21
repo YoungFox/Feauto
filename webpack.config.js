@@ -35,7 +35,8 @@ var indexHtml = path.join(__dirname, "dev", "index.html");
 // console.log();
 module.exports = {
     //插件项
-    plugins: [commonsPlugin,UglifyJsPlugin,SourceMapDevToolPlugin],
+    // plugins: [commonsPlugin,UglifyJsPlugin,SourceMapDevToolPlugin],
+    plugins: [commonsPlugin,UglifyJsPlugin],
     //页面入口文件配置
     entry: {
         index : './dev/src/js/entry.js',
@@ -60,7 +61,16 @@ module.exports = {
             { test: /\.jpg$/, loader: "file-loader" },
             { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'},
             // { test: /\.html$/, name: "mandrillTemplates", loader: 'raw!html-minify'}
-            {test: indexHtml, loaders: ["file?name=[name].[ext]", "extract", "html?" + JSON.stringify({attrs: ["img:src", "link:href"] }) ] }
+            {
+                test: indexHtml,
+                loaders: [
+                    "file?name=[name].[ext]",
+                    "extract",
+                    "html?" + JSON.stringify({
+                        attrs: ["img:src", "link:href"]
+                    })
+                ]
+            }
         ]
     },
     // 'html-minify-loader': {

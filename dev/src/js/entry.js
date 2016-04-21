@@ -1,13 +1,15 @@
+var $ = require('./lib/jquery.js');
 require("../css/style.css");
+var headerIns = false;
+$(window).on('click',function (){
+	require.ensure('./components/header/header.js',function (){
+		var header = require('./components/header/header.js');
+		if(!headerIns){
+			headerIns = new header();
+			headerIns.init();
+		}
+	});
+})
+var dot = require('./lib/doT.js');
+console.log(dot);
 
-var xx = require("./content.js");
-xx();
-var other = require('./other');
-
-var config1 = require("./config.js");
-console.log(config1);
-
-console.log(require('jquery'));
-// 
-var tom = new other('tom');
-tom.sayName();

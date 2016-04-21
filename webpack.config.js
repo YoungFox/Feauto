@@ -1,96 +1,46 @@
+/**
+ * config0
+ * 适用单页面
+ * 目录结构与燕尾服相同
+ */ 
+
+var path=require('path');
 var webpack = require('webpack');
-var path = require("path");
-// definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串
-// var definePlugin = new webpack.DefinePlugin({
-//   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-//   __PRERELEASE__: JSON.stringify(JSON.parse(process.env.BUILD_PRERELEASE || 'false'))
-// });
-
-//js压缩插件
-var UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
-    compress: {
-        warnings: false,
-        dead_code: true,
-        // drop_debugger: false,//默认是ture
-        // drop_console: true //默认是false
-        global_defs: {
-            DEBUG: true
-        }
-    },
-    comments: false,
-    outSourceMap: "[name].js.map",
-    sourceRoot: "sourcemap/"
-})
-
-//将公用模块提取，避免合成一个文件过大，移动端加载太慢
-var commonsPlugin = new webpack.optimize.CommonsChunkPlugin({name:['jquery'],minChunks: Infinity});
-
-//sourcemap插件，加上方便开发，但是编译起来真是慢啊！！！！！！！也可以在uglifyjs中定义，好像会快一点，难道是心理作用？
-var SourceMapDevToolPlugin = new webpack.SourceMapDevToolPlugin({
-                                filename: 'sourcemap/[name].js.map',
-                            });
-
-
-var indexHtml = path.join(__dirname, "dev", "index.html");
-// console.log();
-module.exports = {
-    //插件项
-    // plugins: [commonsPlugin,UglifyJsPlugin,SourceMapDevToolPlugin],
-    plugins: [commonsPlugin,UglifyJsPlugin],
-    //页面入口文件配置
-    entry: {
-        index : './dev/src/js/entry.js',
-        // home : './dev/index.html',
-        jquery: ['jquery']
-    },
-    entry:[
-        indexHtml,
-    ],
-    //入口文件输出配置
-    output: {
-        path: './build',
-        filename: '[name].js'
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+module.exports={
+    entry:{
+            index: "./dev/src/js/entry.js"
+        },
+    output:{
+        path: path.join(__dirname,'build/static'),
+        publicPath: "/demo/build/static",
+        filename: "js/[name].js",
+        chunkFilename: "js/[id].chunk.js"
     },
     module: {
-        //加载器配置
-        loaders: [
-            { test: /\.css$/, loader: 'style-loader!css-loader' },
-            { test: /\.js$/, loader: 'jsx-loader?harmony' },
-            { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
-            // 内联 base64 URLs, 限定 <=8k 的图片, 其他的用 URL
-            { test: /\.jpg$/, loader: "file-loader" },
-            { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'},
-            // { test: /\.html$/, name: "mandrillTemplates", loader: 'raw!html-minify'}
-            {
-                test: indexHtml,
-                loaders: [
-                    "file?name=[name].[ext]",
-                    "extract",
-                    "html?" + JSON.stringify({
-                        attrs: ["img:src", "link:href"]
-                    })
-                ]
-            }
+        loaders: [    //加载器
+            {test: /\.html$/, loader: "html" },
+            {test: /\.css$/, loader:ExtractTextPlugin.extract("style", "css") },
+            {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192&name=./img/[hash].[ext]'}
         ]
     },
-    // 'html-minify-loader': {
-    //     empty: true,        // KEEP empty attributes
-    //     cdata: true,        // KEEP CDATA from scripts
-    //     comments: true,     // KEEP comments
-    //     dom: {                            // options of !(htmlparser2)[https://github.com/fb55/htmlparser2]
-    //         lowerCaseAttributeNames: false,      // do not call .toLowerCase for each attribute name (Angular2 use camelCase attributes)
-    //     }
-    // },
-    //其它解决方案配置
-    resolve: {
-        //配置查找模块的路径和扩展名和别名（方便书写）
-        // root: 'E:/github/flux-example/src', //绝对路径
-        //这样就可以写 require('file') 代替 require('file.js')
-        extensions: ['', '.js', '.json', '.scss'],
-        alias: {
-            AppStore : 'js/stores/AppStores.js',
-            ActionType : 'js/actions/ActionType.js',
-            AppAction : 'js/actions/AppAction.js'
-        }
-    }
+    plugins:[
+        new ExtractTextPlugin("css/[name].css"),    //单独使用style标签加载css并设置其路径
+        new HtmlWebpackPlugin({                        //根据模板插入css/js等生成最终HTML
+            // favicon:'./src/img/favicon.ico', //favicon路径
+            filename:'../index.html',    //生成的html存放路径，相对于 path
+            template:'./dev/index.html',    //html模板路径
+            inject:true,    //允许插件修改哪些内容，包括head与body
+            hash:true,    //为静态资源生成hash值
+            minify:{    //压缩HTML文件
+                removeComments:true,    //移除HTML中的注释
+                collapseWhitespace:false    //删除空白符与换行符
+            }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({name:'common',minChunks: 2})
+        // new webpack.optimize.CommonsChunkPlugin({name:'doT',minChunks: Infinity}),
+        // new webpack.optimize.CommonsChunkPlugin({name:'index'})
+
+    ]
 };

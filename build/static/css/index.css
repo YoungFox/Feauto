@@ -2,3 +2,7 @@ body{
 	color: red;
 	background: #000;
 }
+.banner{
+	height: 200px;
+	background: #eee;
+}

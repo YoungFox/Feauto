@@ -1,4 +1,4 @@
-webpackJsonp([1,2],[
+webpackJsonp([1],[
 /* 0 */,
 /* 1 */,
 /* 2 */,
@@ -6,43 +6,49 @@ webpackJsonp([1,2],[
 /* 4 */,
 /* 5 */,
 /* 6 */,
-/* 7 */
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(1);
-	var dot = __webpack_require__(6);
-	var css = __webpack_require__(8);
-	var tpl = __webpack_require__(10);
-	var d = __webpack_require__(11);
-	var Header= function (){
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+
+	var dot = __webpack_require__(7);
+	var css = __webpack_require__(13);
+	var tpl = __webpack_require__(15);
+	var d = __webpack_require__(16);
+	console.log($);
+	var Header = function Header() {
 		this.title = d.title;
-	}
+	};
 
 	Header.prototype = {
 		constructor: Header,
-		init: function (){
+		init: function init() {
 			var tplFn = dot.template(tpl);
 			var html = tplFn(d);
 			$('body').append(html);
 		},
-		show: function (){
-
-		}
-	}
+		show: function show() {}
+	};
 
 	module.exports = Header;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 8 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(9);
+	var content = __webpack_require__(14);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(5)(content, {});
+	var update = __webpack_require__(6)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -59,10 +65,10 @@ webpackJsonp([1,2],[
 	}
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(4)();
+	exports = module.exports = __webpack_require__(5)();
 	// imports
 
 
@@ -73,20 +79,24 @@ webpackJsonp([1,2],[
 
 
 /***/ },
-/* 10 */
-/***/ function(module, exports) {
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	var tpl = '<div class="header">{{=it.title}}</div>';
-
+	var dot = __webpack_require__(7);
 	module.exports = tpl;
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	var data = {
-		title:'组件 #header# 的title'
-	}
+		title: '组件 #header# 的title'
+	};
 	module.exports = data;
 
 /***/ }

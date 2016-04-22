@@ -1,5 +1,6 @@
-var $ = require('./lib/jquery.js');
+// var $ = require('./lib/jquery.js');
 require("../css/style.css");
+var dot = require('./lib/doT.js');
 var headerIns = false;
 $(window).on('click',function (){
 	require.ensure('./components/header/header.js',function (){
@@ -10,6 +11,7 @@ $(window).on('click',function (){
 		}
 	});
 })
-var dot = require('./lib/doT.js');
-console.log(dot);
+var Banner = require('./components/banner/banner');
+var banner = new Banner('我是banner');
+banner.ini();
 

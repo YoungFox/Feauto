@@ -1,8 +1,8 @@
-var $ = require('../../lib/jquery.js');
 var dot = require('../../lib/doT.js');
 var css = require('./header.css');
 var tpl = require('./tpl.js');
 var d = require('./data.js');
+console.log($);
 var Header= function (){
 	this.title = d.title;
 }

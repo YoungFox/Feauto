@@ -6,12 +6,11 @@ class Banner{
 	}
 	ini(){
 		var tpl = require('./tpl');
-		console.log(tpl);
+		// console.log(tpl);
 		var tplFn = dot.template(tpl);
 		var bannerHtml = tplFn({title:this.title});
-		console.log(bannerHtml);
+		// console.log(bannerHtml);
 		$('body').append(bannerHtml);
 	}
-}
-
+};
 module.exports = Banner;

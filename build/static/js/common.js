@@ -22,48 +22,48 @@
 /******/ 			return __webpack_require__(0);
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// object to store loaded and loading chunks
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
 /******/ 		3:0
 /******/ 	};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
+/******/
 /******/ 	// This file contains only the entry chunk.
 /******/ 	// The chunk loading function for additional chunks
 /******/ 	__webpack_require__.e = function requireEnsure(chunkId, callback) {
 /******/ 		// "0" is the signal for "already loaded"
 /******/ 		if(installedChunks[chunkId] === 0)
 /******/ 			return callback.call(null, __webpack_require__);
-
+/******/
 /******/ 		// an array means "currently loading".
 /******/ 		if(installedChunks[chunkId] !== undefined) {
 /******/ 			installedChunks[chunkId].push(callback);
@@ -75,20 +75,20 @@
 /******/ 			script.type = 'text/javascript';
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
-
+/******/
 /******/ 			script.src = __webpack_require__.p + "js/" + chunkId + ".chunk.js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/demo/build/static";
+/******/ 	__webpack_require__.p = "static/";
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -97,14 +97,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
-
+	
 	// doT.js
 	// 2011-2014, Laura Doktorova, https://github.com/olado/doT
 	// Licensed under the MIT license.
-
+	
 	(function () {
 		"use strict";
-
+	
 		var doT = {
 			version: "1.0.3",
 			templateSettings: {
@@ -127,7 +127,7 @@
 			compile: undefined //fn, for express
 		},
 		    _globals;
-
+	
 		doT.encodeHTMLSource = function (doNotSkipEncoded) {
 			var encodeHTMLRules = { "&": "&#38;", "<": "&#60;", ">": "&#62;", '"': "&#34;", "'": "&#39;", "/": "&#47;" },
 			    matchHTML = doNotSkipEncoded ? /[&<>"'\/]/g : /&(?!#?\w+;)|<|>|"|'|\//g;
@@ -137,11 +137,11 @@
 				}) : "";
 			};
 		};
-
+	
 		_globals = function () {
 			return this || (0, eval)("this");
 		}();
-
+	
 		if (typeof module !== "undefined" && module.exports) {
 			module.exports = doT;
 		} else if (true) {
@@ -151,13 +151,13 @@
 		} else {
 			_globals.doT = doT;
 		}
-
+	
 		var startend = {
 			append: { start: "'+(", end: ")+'", startencode: "'+encodeHTML(" },
 			split: { start: "';out+=(", end: ");out+='", startencode: "';out+=encodeHTML(" }
 		},
 		    skip = /$^/;
-
+	
 		function resolveDefs(c, block, def) {
 			return (typeof block === "string" ? block : block.toString()).replace(c.define || skip, function (m, code, assign, value) {
 				if (code.indexOf("def.") === 0) {
@@ -187,11 +187,11 @@
 				return v ? resolveDefs(c, v, def) : v;
 			});
 		}
-
+	
 		function unescape(code) {
 			return code.replace(/\\('|\\)/g, "$1").replace(/[\r\t\n]/g, " ");
 		}
-
+	
 		doT.template = function (tmpl, c, def) {
 			c = c || doT.templateSettings;
 			var cse = c.append ? startend.append : startend.split,
@@ -199,7 +199,7 @@
 			    sid = 0,
 			    indv,
 			    str = c.use || c.define ? resolveDefs(c, tmpl, def || {}) : tmpl;
-
+	
 			str = ("var out='" + (c.strip ? str.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g, " ").replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g, "") : str).replace(/'|\\/g, "\\$&").replace(c.interpolate || skip, function (m, code) {
 				return cse.start + unescape(code) + cse.end;
 			}).replace(c.encode || skip, function (m, code) {
@@ -215,7 +215,7 @@
 				return "';" + unescape(code) + "out+='";
 			}) + "';return out;").replace(/\n/g, "\\n").replace(/\t/g, '\\t').replace(/\r/g, "\\r").replace(/(\s|;|\}|^|\{)out\+='';/g, '$1').replace(/\+''/g, "");
 			//.replace(/(\s|;|\}|^|\{)out\+=''\+/g,'$1out+=');
-
+	
 			if (needhtmlencode) {
 				if (!c.selfcontained && _globals && !_globals._encodeHTML) _globals._encodeHTML = doT.encodeHTMLSource(c.doNotSkipEncoded);
 				str = "var encodeHTML = typeof _encodeHTML !== 'undefined' ? _encodeHTML : (" + doT.encodeHTMLSource.toString() + "(" + (c.doNotSkipEncoded || '') + "));" + str;
@@ -227,7 +227,7 @@
 				throw e;
 			}
 		};
-
+	
 		doT.compile = function (tmpl, def) {
 			return doT.template(tmpl, null, def);
 		};
@@ -236,3 +236,4 @@
 /***/ }
 
 /******/ });
+//# sourceMappingURL=../sourcemap/js/common.js.map

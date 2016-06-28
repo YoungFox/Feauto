@@ -7,10 +7,11 @@
 
 var path=require('path');
 var webpack = require('webpack');
+var glob = require('glob');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 //抛出一个配置对象，供webpack使用
-module.exports={
+var config ={
     //项目入口js
     entry:{
             index: "./dev/src/js/entry.js",
@@ -54,18 +55,18 @@ module.exports={
                 // $: 'jquery'
             }),
         new ExtractTextPlugin("css/[name].css"),    //单独使用style标签加载css并设置其路径
-        new HtmlWebpackPlugin({                        //根据模板插入css/js等标签生成最终HTML
-            // favicon:'./src/img/favicon.ico', //favicon路径
-            filename:'../index.html',    //生成的html存放路径，相对于 output.path
-            template:'./dev/index.html',    //html模板路径
-            inject:true,    //允许插件修改哪些内容，包括head与body
-            hash:true,    //为静态资源生成hash值
-            chunks: ['common','index'],
-            minify:{    //压缩HTML文件
-                removeComments:true,    //移除HTML中的注释
-                collapseWhitespace:false    //删除空白符与换行符
-            }
-        }),
+        // new HtmlWebpackPlugin({                        //根据模板插入css/js等标签生成最终HTML
+        //     // favicon:'./src/img/favicon.ico', //favicon路径
+        //     filename:'../index.html',    //生成的html存放路径，相对于 output.path
+        //     template:'./dev/index.html',    //html模板路径
+        //     inject:true,    //允许插件修改哪些内容，包括head与body
+        //     hash:true,    //为静态资源生成hash值
+        //     chunks: ['common','index'],
+        //     minify:{    //压缩HTML文件
+        //         removeComments:true,    //移除HTML中的注释
+        //         collapseWhitespace:false    //删除空白符与换行符
+        //     }
+        // }),
         new webpack.optimize.CommonsChunkPlugin({name:'common',minChunks: 2})
         // new webpack.optimize.CommonsChunkPlugin({name:'doT',minChunks: Infinity}),
         // new webpack.optimize.CommonsChunkPlugin({name:'index'})
@@ -85,5 +86,48 @@ module.exports={
     devtool:'source-map'
 };
 
+var pages = Object.keys(getEntry('dev/*.html'));
+pages.forEach(function(basename) {
+    var conf = {
+        filename: 'views/' + basename + '.html', //生成的html存放路径，相对于path
+        template: 'dev/' + basename + '.html', //html模板路径
+        inject: true,    //js插入的位置，true/'head'/'body'/false
+        chunks: ['common'], //默认引用模块
+        hash: true
+        /*
+        * 压缩这块，调用了html-minify，会导致压缩时候的很多html语法检查问题，
+        * 如在html标签属性上使用{{...}}表达式，所以很多情况下并不需要在此配置压缩项，
+        * 另外，UglifyJsPlugin会在压缩代码的时候连同html一起压缩。
+        * 为避免压缩html，需要在html-loader上配置'html?-minimize'，见loaders中html-loader的配置。
+         */
+        // minify: { //压缩HTML文件
+        //     removeComments: true, //移除HTML中的注释
+        //     collapseWhitespace: false //删除空白符与换行符
+        // }
+    };
+    if (basename in config.entry) {
+        // conf.favicon = 'src/imgs/favicon.ico';
+        conf.chunks = ['common', basename];
+    }
+    config.plugins.push(new HtmlWebpackPlugin(conf));
+});
 
 
+module.exports = config;
+
+
+//获取指定类型所有文件
+function getEntry(globPath) {
+    var files = glob.sync(globPath);
+    var entries = {},
+        entry, dirname, basename, pathname, extname;
+
+    for (var i = 0; i < files.length; i++) {
+        entry = files[i];
+        dirname = path.dirname(entry);
+        extname = path.extname(entry);
+        basename = path.basename(entry, extname);
+        entries[basename] = ['./' + entry];
+    }
+    return entries;
+}

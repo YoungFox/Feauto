@@ -89,7 +89,7 @@ var config ={
 var pages = Object.keys(getEntry('dev/*.html'));
 pages.forEach(function(basename) {
     var conf = {
-        filename: 'views/' + basename + '.html', //生成的html存放路径，相对于path
+        filename: '../views/' + basename + '.html', //生成的html存放路径，相对于path
         template: 'dev/' + basename + '.html', //html模板路径
         inject: true,    //js插入的位置，true/'head'/'body'/false
         chunks: ['common'], //默认引用模块

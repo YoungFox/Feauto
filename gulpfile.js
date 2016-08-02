@@ -1,21 +1,21 @@
-var gulp = require("gulp");
-var webpack = require("webpack");
-var webpackConfig = require("./webpack.config.js");
+var gulp = require('gulp');
+var webpack = require('webpack');
+var webpackConfig = require('./webpack.config.js');
 var livereload = require('gulp-livereload');
 var myConfig = Object.create(webpackConfig);
-	// myConfig.devtool = "eval";
+	// myConfig.devtool = 'eval';
 	myConfig.debug = true;
 
 
 // 默认task
-gulp.task("default", ["webpack-dev-server"]);
+gulp.task('default', ['webpack-dev-server']);
 
 
 // 读取配置
 var myDevConfig = Object.create(webpackConfig);
 myDevConfig.debug = true;
 
-gulp.task("webpack-dev-server", function(callback) {
+gulp.task('webpack-dev-server', function(callback) {
 	//访问：http://localhost:3000/build/index.html
 	var compiler = webpack(myConfig);
 	//相当于webpack --watch
@@ -71,31 +71,31 @@ gulp.task('serve', ['sass'], function() {
 		// ...
 	});
     browserSync.init({
-        server: "./build",
+        server: ['./build','./build/views/'],
         port: 8880
     });
 
-    gulp.watch("dev/src/scss/*.scss", ['sass']);
-    gulp.watch("build/static/css/*.css",function(){
+    gulp.watch('dev/src/scss/*.scss', ['sass']);
+    gulp.watch('build/static/css/*.css',function(){
 		console.log(0);
-		gulp.src("build/static/css/*.css")
+		gulp.src('build/static/css/*.css')
 	        .pipe(browserSync.stream());
 	});
 
-	gulp.watch("build/static/js/*.js",function(){console.log(1);
-		gulp.src("build/static/js/*.js")
+	gulp.watch('build/static/js/*.js',function(){console.log(1);
+		gulp.src('build/static/js/*.js')
 	        .pipe(browserSync.stream());
 	});
 
-	gulp.watch("build/*.html").on('change',function(){browserSync.reload();console.log(2);});
+	gulp.watch('build/*.html').on('change',function(){browserSync.reload();console.log(2);});
 });
 
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function() {
 	//测试sass可以不刷新页面生效样式
-    return gulp.src("dev/src/scss/*.scss")
+    return gulp.src('dev/src/scss/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest("build/static/css"))
+        .pipe(gulp.dest('build/static/css'))
         .pipe(browserSync.stream());
 });
 

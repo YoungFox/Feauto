@@ -2647,7 +2647,7 @@ webpackJsonp([0],[
 		styleElementsInsertedAtTop = [];
 	
 	module.exports = function(list, options) {
-		if(false) {
+		if(true) {
 			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
 		}
 	

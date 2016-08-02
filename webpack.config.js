@@ -11,17 +11,18 @@ var glob = require('glob');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var feaEntry = require('fea-entry');
-var entry = feaEntry('dev/src/js/',['lib']);
+var entry = feaEntry('./dev/src/js/', ['lib','components','conf']);
 
-// console.log(entry);
+console.log(entry);
 
 //抛出一个配置对象，供webpack使用
 var config = {
     //项目入口js
-    entry: {
-        index: "./dev/src/js/entry.js",
-        index1: "./dev/src/js/entry1.js"
-    },
+    // entry: {
+    //     index: "./dev/src/js/entry.js",
+    //     index1: "./dev/src/js/entry1.js"
+    // },
+    entry: entry,
     //编译目录
     output: {
         //文件编译的目标文件夹
@@ -102,11 +103,13 @@ var config = {
     devtool: 'source-map'
 };
 
-var pages = Object.keys(getEntry('dev/*.html'));
-pages.forEach(function(basename) {
+var pages = Object.keys(getEntry('./dev/views/'));
+// console.log(getEntry('dev/views/'));
+pages.forEach(function(entryName) {
+    console.log(path.resolve('dev/views/',entryName+'.html'));
     var conf = {
-        filename: '../views/' + basename + '.html', //生成的html存放路径，相对于path
-        template: 'dev/' + basename + '.html', //html模板路径
+        filename: path.join('../views/' ,entryName + '.html'), //生成的html存放路径，相对于path
+        template: path.resolve('dev/views/',entryName+'.html'), //html模板路径
         inject: true, //js插入的位置，true/'head'/'body'/false
         chunks: ['common'], //默认引用模块
         hash: true
@@ -121,9 +124,9 @@ pages.forEach(function(basename) {
             //     collapseWhitespace: false //删除空白符与换行符
             // }
     };
-    if (basename in config.entry) {
+    if (entryName in config.entry) {
         // conf.favicon = 'src/imgs/favicon.ico';
-        conf.chunks = ['common', basename];
+        conf.chunks = ['common', entryName];
     }
     config.plugins.push(new HtmlWebpackPlugin(conf));
 });
@@ -132,18 +135,20 @@ pages.forEach(function(basename) {
 module.exports = config;
 
 
-//获取指定类型所有文件
+//获取指定类型所有views文件
 function getEntry(globPath) {
-    var files = glob.sync(globPath);
-    var entries = {},
-        entry, dirname, basename, pathname, extname;
+    var files = glob.sync(globPath + '**/*.html');
+    var pages = {},
+        page, dirname, entryName, basename, pathname, extname;
 
     for (var i = 0; i < files.length; i++) {
-        entry = files[i];
-        dirname = path.dirname(entry);
-        extname = path.extname(entry);
-        basename = path.basename(entry, extname);
-        entries[basename] = ['./' + entry];
+        page = files[i];
+        dirname = path.dirname(page);
+        extname = path.extname(page);
+        basename = path.basename(page, extname);
+        entryName = path.join(dirname.replace(globPath,''),basename);
+
+        pages[entryName] = [path.join('./',page)];
     }
-    return entries;
+    return pages;
 }

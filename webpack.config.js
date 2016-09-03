@@ -5,23 +5,18 @@
  *不一定非要全写成json，这个config就是一个node.js module，可以写任何JavaScript
  */
 
-var path = require('path');
-var webpack = require('webpack');
-var glob = require('glob');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var feaEntry = require('fea-entry');
-var entry = feaEntry('./dev/src/js/', ['lib','components','conf']);
+const path = require('path');
+const webpack = require('webpack');
+const glob = require('glob');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const feaEntry = require('fea-entry');
+let entry = feaEntry('./dev/src/js/', ['lib', 'components', 'conf']);
 
-console.log(entry);
 
 //抛出一个配置对象，供webpack使用
-var config = {
+let config = {
     //项目入口js
-    // entry: {
-    //     index: "./dev/src/js/entry.js",
-    //     index1: "./dev/src/js/entry1.js"
-    // },
     entry: entry,
     //编译目录
     output: {
@@ -103,13 +98,32 @@ var config = {
     devtool: 'source-map'
 };
 
-var pages = Object.keys(getEntry('./dev/views/'));
+
+//获取指定类型所有views文件
+let getEntry = (globPath = './dev/views/') => {
+    let files = glob.sync(globPath + '**/*.html');
+    let pages = {},
+        page, dirname, entryName, basename, pathname, extname;
+
+    for (let i = 0; i < files.length; i++) {
+        page = files[i];
+        dirname = path.dirname(page);
+        extname = path.extname(page);
+        basename = path.basename(page, extname);
+        entryName = path.join(dirname.replace(globPath, ''), basename);
+
+        pages[entryName] = [path.join('./', page)];
+    }
+    return pages;
+}
+
+let pages = Object.keys(getEntry('./dev/views/'));
 // console.log(getEntry('dev/views/'));
-pages.forEach(function(entryName) {
-    console.log(path.resolve('dev/views/',entryName+'.html'));
-    var conf = {
-        filename: path.join('../views/' ,entryName + '.html'), //生成的html存放路径，相对于path
-        template: path.resolve('dev/views/',entryName+'.html'), //html模板路径
+pages.forEach((entryName) => {
+    // console.log(path.resolve('dev/views/',entryName+'.html'));
+    let conf = {
+        filename: path.join('../views/', entryName + '.html'), //生成的html存放路径，相对于path
+        template: path.resolve('dev/views/', entryName + '.html'), //html模板路径
         inject: true, //js插入的位置，true/'head'/'body'/false
         chunks: ['common'], //默认引用模块
         hash: true
@@ -131,24 +145,4 @@ pages.forEach(function(entryName) {
     config.plugins.push(new HtmlWebpackPlugin(conf));
 });
 
-
 module.exports = config;
-
-
-//获取指定类型所有views文件
-function getEntry(globPath) {
-    var files = glob.sync(globPath + '**/*.html');
-    var pages = {},
-        page, dirname, entryName, basename, pathname, extname;
-
-    for (var i = 0; i < files.length; i++) {
-        page = files[i];
-        dirname = path.dirname(page);
-        extname = path.extname(page);
-        basename = path.basename(page, extname);
-        entryName = path.join(dirname.replace(globPath,''),basename);
-
-        pages[entryName] = [path.join('./',page)];
-    }
-    return pages;
-}

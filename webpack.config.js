@@ -1,8 +1,8 @@
 /**
  * config0
- * 适用单页面
+ * 适用单页面|多页面
  * 编译的目录结构与燕尾服相同
- *不一定非要全写成json，这个config就是一个node.js module，可以写任何JavaScript
+ * 不一定非要全写成json，这个config就是一个node.js module，可以写任何JavaScript
  */
 
 const path = require('path');
@@ -23,7 +23,7 @@ let config = {
         //文件编译的目标文件夹
         path: path.join(__dirname, 'build/static'),
         //服务器的相对路径
-        publicPath: "static/",
+        publicPath: "/static/",
         filename: "js/[name].js",
         //ensure延迟加载的模块编译目录、名字
         chunkFilename: "js/[id].chunk.js",
@@ -64,6 +64,7 @@ let config = {
                 // $: 'jquery'
         }),
         new ExtractTextPlugin("css/[name].css"), //单独使用style标签加载css并设置其路径
+
         // new HtmlWebpackPlugin({                        //根据模板插入css/js等标签生成最终HTML
         //     // favicon:'./src/img/favicon.ico', //favicon路径
         //     filename:'../index.html',    //生成的html存放路径，相对于 output.path
@@ -76,6 +77,7 @@ let config = {
         //         collapseWhitespace:false    //删除空白符与换行符
         //     }
         // }),
+
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common',
             minChunks: 2
@@ -117,7 +119,7 @@ let getEntry = (globPath = './dev/views/') => {
     return pages;
 }
 
-let pages = Object.keys(getEntry('./dev/views/'));
+let pages = Object.keys(getEntry());
 // console.log(getEntry('dev/views/'));
 pages.forEach((entryName) => {
     // console.log(path.resolve('dev/views/',entryName+'.html'));

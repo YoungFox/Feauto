@@ -1,13 +1,13 @@
-var webpack = require('webpack');
-var path = require("path");
+const webpack = require('webpack');
+const path = require("path");
 // definePlugin 接收字符串插入到代码当中, 所以你需要的话可以写上 JS 的字符串
-// var definePlugin = new webpack.DefinePlugin({
+// let definePlugin = new webpack.DefinePlugin({
 //   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
 //   __PRERELEASE__: JSON.stringify(JSON.parse(process.env.BUILD_PRERELEASE || 'false'))
 // });
 
 //js压缩插件
-var UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
+let UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
     compress: {
         warnings: false,
         dead_code: true,
@@ -23,15 +23,15 @@ var UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
 })
 
 //将公用模块提取，避免合成一个文件过大，移动端加载太慢
-var commonsPlugin = new webpack.optimize.CommonsChunkPlugin({name:['jquery'],minChunks: Infinity});
+let commonsPlugin = new webpack.optimize.CommonsChunkPlugin({name:['jquery'],minChunks: Infinity});
 
 //sourcemap插件，加上方便开发，但是编译起来真是慢啊！！！！！！！也可以在uglifyjs中定义，好像会快一点，难道是心理作用？
-var SourceMapDevToolPlugin = new webpack.SourceMapDevToolPlugin({
+let SourceMapDevToolPlugin = new webpack.SourceMapDevToolPlugin({
                                 filename: 'sourcemap/[name].js.map',
                             });
 
 
-var indexHtml = path.join(__dirname, "dev", "index.html");
+let indexHtml = path.join(__dirname, "dev", "index.html");
 // console.log();
 module.exports = {
     //插件项

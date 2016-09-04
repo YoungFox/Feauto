@@ -1,0 +1,30 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	background: #fff;
+	/*padding: 100px;*/
+}
+body .banner{
+	/*color: blue!important;*/
+}
+.banner{
+	height: 120px;
+	background: #6f5499;
+	color: #fff;
+	font-size: 28px;
+	line-height: 120px;
+	text-align: center;
+}.content{
+	height: 400px;
+	background: #00be3c;
+	color: #fff;
+	text-align: center;
+	line-height: 40px;
+}
+.content a{
+	color: #fff;
+}
+
+/*# sourceMappingURL=../../sourcemap/css/index/index.css.map*/

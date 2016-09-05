@@ -2,14 +2,13 @@ const gulp = require('gulp');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
 const livereload = require('gulp-livereload');
+const path = require('path');
 const myConfig = Object.create(webpackConfig);
 // myConfig.devtool = 'eval';
 myConfig.debug = true;
 
-
 // 默认task
 gulp.task('default', ['webpack-dev-server','sass']);
-
 
 // 读取配置
 let myDevConfig = Object.create(webpackConfig);
@@ -42,13 +41,12 @@ gulp.task('webpack-dev-server', function(callback) {
 	});
 });
 
-
-
 let browserSync = require('browser-sync').create();
 let sass = require('gulp-sass');
+let sassDevPath = path.resolve('dev/src/scss/**/*.scss');
 
 // browserSync 创建静态服务 + 监控 scss/html等
-gulp.task('serve', ['sass'], function() {
+gulp.task('dev', ['sass'], function() {
 
 
 	/*
@@ -73,16 +71,18 @@ gulp.task('serve', ['sass'], function() {
 		port: 8880
 	});
 
-	gulp.watch('dev/src/scss/*.scss', ['sass']);
-	gulp.watch('build/static/css/**/*.css', function() {
+	let jsBuildPath = path.resolve('build/static/css/**/*.css');
+	gulp.watch(sassDevPath, ['sass']);
+	gulp.watch(jsBuildPath, function() {
 		// console.log("检测到css文件变化");
-		gulp.src('build/static/css/**/*.css')
+		gulp.src(jsBuildPath)
 			.pipe(browserSync.stream());
 	});
 
-	gulp.watch('build/static/js/**/*.js', function() {
+	let cssBuildPath = path.resolve('build/static/js/**/*.js');
+	gulp.watch(cssBuildPath, function() {
 		// console.log("检测到js文件变化");
-		gulp.src('build/static/js/**/*.js')
+		gulp.src(cssBuildPath)
 			.pipe(browserSync.stream());
 	});
 
@@ -95,7 +95,7 @@ gulp.task('serve', ['sass'], function() {
 // sass编译为css & 自动注入到浏览器中
 gulp.task('sass', function() {
 	//测试sass可以不刷新页面生效样式
-	return gulp.src('dev/src/scss/**/*.scss')
+	return gulp.src(sassDevPath)
 		.pipe(sass())
 		.pipe(gulp.dest('build/static/css'))
 		.pipe(browserSync.stream());

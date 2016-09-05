@@ -1,7 +1,6 @@
 /**
  * config0
  * 适用单页面|多页面
- * 编译的目录结构与燕尾服相同
  * 不一定非要全写成json，这个config就是一个node.js module，可以写任何JavaScript
  */
 

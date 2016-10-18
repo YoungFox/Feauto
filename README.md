@@ -15,5 +15,5 @@ http://localhost:8080/
 2、gulp
 http://localhost:3000
 
-3、gulp serve
+3、gulp dev
 http://localhost:8880

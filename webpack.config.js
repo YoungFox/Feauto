@@ -12,6 +12,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const feaEntry = require('fea-entry');
 let entry = feaEntry('./dev/src/js/', ['lib', 'components', 'conf']);
 
+//压缩插件
+let UglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
+    compress: {
+        warnings: false,
+        dead_code: true,
+        // drop_debugger: false,//默认是ture
+        // drop_console: true //默认是false
+        global_defs: {
+            DEBUG: true
+        }
+    },
+    comments: false
+        // outSourceMap: "[name].js.map",
+        // sourceRoot: "sourcemap/"
+})
 
 //抛出一个配置对象，供webpack使用
 let config = {
@@ -35,7 +50,7 @@ let config = {
             {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel', // 'babel-loader' is also a legal name to reference
+                loader: 'babel',
                 query: {
                     presets: ['es2015']
                 }
@@ -56,6 +71,7 @@ let config = {
         ]
     },
     plugins: [
+        UglifyJsPlugin,
         new webpack.ProvidePlugin({ //加载jq
             $: path.resolve(__dirname, 'dev/src/js/lib/jquery'),
             jQuery: path.resolve(__dirname, 'dev/src/js/lib/jquery')
@@ -87,7 +103,7 @@ let config = {
     ],
     resolve: {
         //配置查找模块的路径和扩展名和别名（方便书写）
-        // root: 'E:/github/flux-example/src', //绝对路径
+        //绝对路径
 
         //这样就可以写 require('file') 代替 require('file.js')
         extensions: ['', '.js', '.json', '.scss'],
@@ -96,7 +112,7 @@ let config = {
         }
     },
     cache: true,
-    devtool: 'source-map'
+    devtool: 'inline-source-map'
 };
 
 
@@ -112,7 +128,6 @@ let getEntry = (globPath = './dev/views/') => {
         extname = path.extname(page);
         basename = path.basename(page, extname);
         entryName = path.join(dirname.replace(globPath, ''), basename);
-
         pages[entryName] = [path.join('./', page)];
     }
     return pages;
